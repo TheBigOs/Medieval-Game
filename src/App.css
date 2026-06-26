@@ -416,6 +416,12 @@
 
 .hud-item:last-child { margin-bottom: 0; }
 
+.hud-weapon-icon {
+  flex-shrink: 0;
+  align-self: center;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+}
+
 .hud-eq {
   font-family: 'Cinzel', serif;
   font-size: 18px;

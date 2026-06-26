@@ -16,7 +16,7 @@ function msg(text: string, type: MessageType = 'narrative'): GameMessage {
 }
 
 function computeAC(player: GameState['player']): number {
-  const base = 10 + statMod(player.dex);
+  const base = 8 + statMod(player.dex);
   return base + (player.equipped.body?.acBonus ?? 0) + (player.equipped.offhand?.acBonus ?? 0);
 }
 
@@ -1144,7 +1144,7 @@ export function createInitialState(): GameState {
     player: {
       hp: 20, maxHp: 20,
       str: 12, dex: 13, con: 10,
-      ac: 11,
+      ac: 9,
       inventory: [],
       equipped: { weapon: null, offhand: null, body: null, necklace: null },
       xp: 0,
