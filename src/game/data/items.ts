@@ -238,6 +238,13 @@ const BASE_ITEMS: Record<string, Item> = {
     description: 'Blessed water in a sealed crystal vial. Drinkable in a pinch — faintly bitter, oddly restorative. Restores 6 HP.',
     healAmount: 6,
   },
+  'god-apple': {
+    id: 'god-apple',
+    name: 'GOD Apple',
+    type: 'consumable',
+    description: 'How did this end up here?',
+    healAmount: 50,
+  },
 
   // ── Holy Relic ─────────────────────────────────────────────────────────────
   'holy-relic': {

@@ -89,6 +89,7 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
       id: 'crypt', ...rt['crypt'],
       exits: { east: 'undercroft' },
       items: [], enemies: [spawn('skeleton_knight')], visited: false,
+      searchable: true, hiddenItems: ['god-apple', 'healing-herbs'], searched: false,
     },
 
     'kitchen': {
