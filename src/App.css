@@ -416,10 +416,14 @@
 
 .hud-item:last-child { margin-bottom: 0; }
 
-.hud-weapon-icon {
+.hud-item-icon {
   flex-shrink: 0;
   align-self: center;
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+}
+
+.hud-icon-special {
+  filter: drop-shadow(0 0 6px rgba(255, 200, 50, 0.7));
 }
 
 .hud-eq {
