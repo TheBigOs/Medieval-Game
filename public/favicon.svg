@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Sky -->
+  <rect width="32" height="32" fill="#0a0a14" rx="3"/>
+
+  <!-- Moon -->
+  <circle cx="25" cy="6" r="2.8" fill="#d8d8b0" opacity="0.85"/>
+
+  <!-- Left tower body -->
+  <rect x="1" y="11" width="8" height="21" fill="#5a5a7a"/>
+  <!-- Left tower merlons -->
+  <rect x="1"  y="8" width="2" height="4" fill="#5a5a7a"/>
+  <rect x="4"  y="8" width="2" height="4" fill="#5a5a7a"/>
+  <rect x="7"  y="8" width="2" height="4" fill="#5a5a7a"/>
+
+  <!-- Right tower body -->
+  <rect x="23" y="11" width="8" height="21" fill="#5a5a7a"/>
+  <!-- Right tower merlons -->
+  <rect x="23" y="8" width="2" height="4" fill="#5a5a7a"/>
+  <rect x="26" y="8" width="2" height="4" fill="#5a5a7a"/>
+  <rect x="29" y="8" width="2" height="4" fill="#5a5a7a"/>
+
+  <!-- Main keep body -->
+  <rect x="9" y="15" width="14" height="17" fill="#46466a"/>
+  <!-- Main keep merlons -->
+  <rect x="9"  y="12" width="2" height="4" fill="#46466a"/>
+  <rect x="13" y="12" width="2" height="4" fill="#46466a"/>
+  <rect x="17" y="12" width="2" height="4" fill="#46466a"/>
+  <rect x="21" y="12" width="2" height="4" fill="#46466a"/>
+
+  <!-- Connecting wall (between keep and towers) -->
+  <rect x="1"  y="17" width="8"  height="2" fill="#5a5a7a"/>
+  <rect x="23" y="17" width="8"  height="2" fill="#5a5a7a"/>
+
+  <!-- Gate arch -->
+  <rect x="13" y="23" width="6" height="9" fill="#0a0a14"/>
+  <ellipse cx="16" cy="23" rx="3" ry="2.5" fill="#0a0a14"/>
+
+  <!-- Tower windows (glowing amber) -->
+  <rect x="3"  y="15" width="3" height="4" fill="#c8a430" rx="0.5" opacity="0.9"/>
+  <rect x="26" y="15" width="3" height="4" fill="#c8a430" rx="0.5" opacity="0.9"/>
+
+  <!-- Keep window -->
+  <rect x="14" y="17" width="4" height="4" fill="#c8a430" rx="0.5" opacity="0.75"/>
+
+  <!-- Flag poles -->
+  <line x1="5"  y1="8" x2="5"  y2="4" stroke="#8888aa" stroke-width="1"/>
+  <line x1="27" y1="8" x2="27" y2="4" stroke="#8888aa" stroke-width="1"/>
+  <!-- Flags (triangles) -->
+  <polygon points="5,4 9,5.5 5,7"  fill="#a03030" opacity="0.9"/>
+  <polygon points="27,4 31,5.5 27,7" fill="#a03030" opacity="0.9"/>
+</svg>

@@ -48,16 +48,21 @@ function WeaponIcon({ id }: { id: string }) {
   if (id.includes('axe') || id === 'halberd') {
     return (
       <svg {...ICON_PROPS}>
-        <line x1="5" y1="20" x2="17" y2="8" stroke="white" strokeWidth="1.8" strokeLinecap="round" opacity={0.85} />
-        <path d="M15 6 C17 2 22 4 21 10 L17 8 Z" fill="white" opacity={0.85} />
+        {/* Handle */}
+        <line x1="4" y1="22" x2="13" y2="12" stroke="white" strokeWidth="2" strokeLinecap="round" opacity={0.85} />
+        {/* Traditional axe head: sharp poll corners, clean single-arc blade, pointed beard */}
+        <path d="M12 11 L8 8 L9 3 L13 1 C20 1 23 7 22 13 C21 18 17 21 13 21 Z"
+              fill="white" opacity={0.9} />
       </svg>
     );
   }
   if (id === 'warhammer' || id === 'iron-mace' || id === 'morning-star') {
     return (
       <svg {...ICON_PROPS}>
-        <line x1="5" y1="20" x2="15" y2="10" stroke="white" strokeWidth="1.8" strokeLinecap="round" opacity={0.85} />
-        <rect x="13" y="5" width="8" height="6" rx="1" transform="rotate(-45 17 8)" fill="white" opacity={0.85} />
+        {/* Handle */}
+        <line x1="5" y1="22" x2="11" y2="12" stroke="white" strokeWidth="1.8" strokeLinecap="round" opacity={0.85} />
+        {/* Hammer head — centered on handle endpoint, rotated perpendicular to handle */}
+        <rect x="2" y="7.5" width="18" height="9" rx="2" transform="rotate(31 11 12)" fill="white" opacity={0.88} />
       </svg>
     );
   }
@@ -93,21 +98,25 @@ function ArmorIcon({ item }: { item: Item }) {
       </svg>
     );
   }
-  // Shields (offhand)
+  // Shields (offhand) — traditional heater shield, filled
   if (item.slot === 'offhand') {
     return (
       <svg {...ICON_PROPS}>
-        <path d="M12 3 L19 7 L19 15 L12 21 L5 15 L5 7 Z" stroke="white" strokeWidth="1.6" opacity={0.85} />
-        <circle cx="12" cy="12" r="2.5" fill="white" opacity={0.65} />
+        <path d="M4 3 L20 3 L20 13 C20 20 16 23 12 24 C8 23 4 20 4 13 Z" fill="white" opacity={0.88} />
       </svg>
     );
   }
-  // Body armor — breastplate
+  // Body armor — Minecraft chestplate style, filled
   return (
     <svg {...ICON_PROPS}>
-      <path d="M7 21 L5 10 L7 5 L12 4 L17 5 L19 10 L17 21 Z" stroke="white" strokeWidth="1.5" opacity={0.85} />
-      <path d="M7 5 Q10 3 12 4 Q14 3 17 5" stroke="white" strokeWidth="1.4" strokeLinecap="round" opacity={0.7} />
-      <line x1="9" y1="7" x2="15" y2="7" stroke="white" strokeWidth="0.9" opacity={0.4} />
+      {/* Left pauldron */}
+      <rect x="2" y="4" width="6" height="6" rx="1" fill="white" opacity={0.9} />
+      {/* Right pauldron */}
+      <rect x="16" y="4" width="6" height="6" rx="1" fill="white" opacity={0.9} />
+      {/* Bridge below neck gap */}
+      <rect x="8" y="8" width="8" height="4" fill="white" opacity={0.9} />
+      {/* Torso */}
+      <rect x="5" y="11" width="14" height="11" rx="1" fill="white" opacity={0.9} />
     </svg>
   );
 }
@@ -155,15 +164,16 @@ function ConsumableIcon({ id }: { id: string }) {
       </svg>
     );
   }
-  // Potion (health-potion, greater-health-potion, holy-water — default)
+  // Potion — triangular body with curved edges, filled white
   return (
     <svg {...ICON_PROPS}>
-      <rect x="10" y="2" width="4" height="3" rx="0.8" fill="white" opacity={0.65} />
-      <line x1="10" y1="5" x2="9" y2="8" stroke="white" strokeWidth="1.4" strokeLinecap="round" opacity={0.8} />
-      <line x1="14" y1="5" x2="15" y2="8" stroke="white" strokeWidth="1.4" strokeLinecap="round" opacity={0.8} />
-      <path d="M9 8 Q4 12 5 17 Q6 22 12 22 Q18 22 19 17 Q20 12 15 8 Z"
-            stroke="white" strokeWidth="1.5" opacity={0.85} />
-      <path d="M7 16 Q12 19 17 16" stroke="white" strokeWidth="0.9" opacity={0.35} />
+      {/* Cork */}
+      <rect x="9.5" y="1" width="5" height="3" rx="0.8" fill="white" opacity={0.75} />
+      {/* Neck + triangular body */}
+      <path
+        d="M10 3 L10 7 C6 10 3 15 3 20 Q3 23 6 23 L18 23 Q21 23 21 20 C21 15 18 10 14 7 L14 3 Z"
+        fill="white" opacity={0.9}
+      />
     </svg>
   );
 }
