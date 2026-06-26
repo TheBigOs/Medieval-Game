@@ -2,7 +2,7 @@ export type Direction = 'north' | 'south' | 'east' | 'west';
 export type ItemType = 'weapon' | 'armor' | 'consumable' | 'utility' | 'key';
 export type GamePhase = 'language-select' | 'exploring' | 'combat' | 'game_over' | 'victory' | 'post-escape';
 export type MessageType = 'narrative' | 'combat' | 'loot' | 'error' | 'system' | 'success' | 'roll';
-export type EquipSlot = 'weapon' | 'offhand' | 'body';
+export type EquipSlot = 'weapon' | 'offhand' | 'body' | 'necklace';
 
 // ── Body Part System ───────────────────────────────────────────────────────
 
@@ -45,6 +45,8 @@ export interface Item {
   unlocksRoomId?: string;
   onEquipHeal?: number;
   onEquipMaxHpBonus?: number;
+  spellDamage?: number;
+  lifeStealPct?: number;
 }
 
 // ── Enemies ────────────────────────────────────────────────────────────────
@@ -95,6 +97,7 @@ export interface EquippedItems {
   weapon: Item | null;
   offhand: Item | null;
   body: Item | null;
+  necklace: Item | null;
 }
 
 export interface Player {

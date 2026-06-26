@@ -253,9 +253,29 @@ const BASE_ITEMS: Record<string, Item> = {
     type: 'armor',
     description: 'A golden reliquary warm to the touch, pulsing with divine light. Carried in the shield hand, it grants fortitude and wards off undead.',
     slot: 'offhand',
-    acBonus: 3,
+    acBonus: 1,
     onEquipHeal: 10,
     onEquipMaxHpBonus: 10,
+  },
+
+  // ── Grimoire ───────────────────────────────────────────────────────────────
+  'grimoire': {
+    id: 'grimoire',
+    name: 'Arcane Grimoire',
+    type: 'consumable',
+    description: 'A singed leather tome crackling with trapped fire. One-use only — releases a bolt of fire for 10 damage, bypassing armour.',
+    spellDamage: 10,
+  },
+
+  // ── Trinket ────────────────────────────────────────────────────────────────
+  'trinket-necklace': {
+    id: 'trinket-necklace',
+    name: 'Sanguine Amulet',
+    type: 'armor',
+    description: 'A dark ruby set in tarnished silver. Heals you for 25% of all damage you deal.',
+    slot: 'necklace',
+    acBonus: 0,
+    lifeStealPct: 25,
   },
 
   // ── Keys / Utilities ──────────────────────────────────────

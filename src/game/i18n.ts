@@ -132,6 +132,16 @@ export const ROOM_TEXT: Record<Locale, Record<string, RoomText>> = {
       description: "You push open the great doors and the air turns to ice. The hall has been remade into a throne room of death. Pale magefire brackets the walls. At the far end, upon a throne built from the bones of the village council, sits the Arch-Lich Necromancer.\n\nHis skeletal form is swathed in dark robes that seem to drink the light. A crown of black iron sits above hollow eye sockets burning with violet flame. He does not rise as you enter. When he speaks, the voice resonates inside your skull rather than in your ears:\n\n\"Another meddler climbs my steps. How refreshingly tiresome.\"",
       shortDescription: 'Helmwick town hall. The Arch-Lich Necromancer sits on his throne of bones.',
     },
+    'village-house-2': {
+      name: "Miller's House",
+      description: "A stout house that belonged to the village miller. The grinding wheel in the back room has stopped forever. Shelves that once held sacks of grain are now bare. Two bloated zombies — a miller and his apprentice, still in flour-dusted smocks — lurch toward you between the overturned barrels. Against the far wall, a locked chest bears the mark of a traveling arms merchant. Someone in this village prepared for trouble.",
+      shortDescription: "Miller's house. Two zombies and a merchant's chest of arms. Exit east.",
+    },
+    'village-house-3': {
+      name: "Scholar's House",
+      description: "This house belonged to Helmwick's only scholar — a retired court wizard who never quite left his books behind. Shelves sag under the weight of tomes, scrolls, and glass bottles of coloured dust. A skeleton in academic robes has dragged itself upright in the corner, hollow eye sockets glowing with pale fire.\n\nThe library itself is undisturbed. Somewhere among these books there may be something useful.",
+      shortDescription: "Scholar's house. A skeleton wizard guards a private library. Exit south.",
+    },
   },
   fr: {
     'dungeon-cell': {
@@ -254,6 +264,16 @@ export const ROOM_TEXT: Record<Locale, Record<string, RoomText>> = {
       description: "Vous poussez les grandes portes et l'air se transforme en glace. La salle a été refaite en salle du trône de la mort. Un feu de sorcier pâle illumine les murs. Au fond, sur un trône construit à partir des ossements du conseil municipal, est assis le Nécromancien Archilliche.\n\nSa forme squelettique est enveloppée de robes noires qui semblent absorber la lumière. Une couronne de fer noir surmonte des orbites vides brûlant d'une flamme violette. Il ne se lève pas à votre entrée. Quand il parle, sa voix résonne dans votre crâne plutôt que dans vos oreilles :\n\n\"Encore un indiscret qui monte mes marches. Comme c'est lassant.\"",
       shortDescription: "Hôtel de ville de Helmwick. Le Nécromancien Archilliche siège sur son trône d'ossements.",
     },
+    'village-house-2': {
+      name: 'Maison du Meunier',
+      description: "Une maison solide qui appartenait au meunier du village. La meule dans l'arrière-salle s'est arrêtée pour toujours. Les étagères qui contenaient autrefois des sacs de grain sont maintenant vides. Deux zombies boursouflés — le meunier et son apprenti, encore en tabliers fariné — se ruent vers vous entre les tonneaux renversés. Contre le mur du fond, un coffre verrouillé porte la marque d'un marchand d'armes itinérant.",
+      shortDescription: "Maison du meunier. Deux zombies et un coffre d'armes. Sortie à l'est.",
+    },
+    'village-house-3': {
+      name: "Maison de l'Érudit",
+      description: "Cette maison appartenait au seul érudit de Helmwick — un sorcier de cour à la retraite qui n'avait jamais vraiment quitté ses livres. Des étagères ploient sous le poids de tomes, de parchemins et de bouteilles de verre de poudre colorée. Un squelette en robes académiques s'est redressé dans le coin, ses orbites creuses brillant d'un feu pâle.\n\nLa bibliothèque elle-même est intacte. Quelque part parmi ces livres, il pourrait y avoir quelque chose d'utile.",
+      shortDescription: "Maison de l'érudit. Un squelette garde une bibliothèque privée. Sortie au sud.",
+    },
   },
 };
 
@@ -327,6 +347,8 @@ export const ITEM_TEXT: Record<Locale, Record<string, ItemText>> = {
     'rope':                 { name: 'Coiled Rope',                    description: 'Thirty feet of hempen rope. Could be useful.' },
     'village-key':          { name: 'Village House Key',              description: "A plain iron key, pressed into your hand by a desperate villager. It unlocks the blacksmith's storage room." },
     'holy-relic':           { name: 'Holy Relic',                    description: 'A golden reliquary warm to the touch, pulsing with divine light. Carried in the shield hand, it grants fortitude and wards off undead. Equipping it will permanently increase your maximum health.' },
+    'grimoire':             { name: 'Arcane Grimoire',               description: 'A singed leather tome crackling with trapped fire. One-use only — opening it releases a bolt of fire that deals 10 damage to any enemy, bypassing armour entirely.' },
+    'trinket-necklace':     { name: 'Sanguine Amulet',               description: 'A dark ruby set in tarnished silver, warm to the touch. It hums faintly when blood is spilled. Worn around the neck, it siphons life force from every wound you inflict — healing you for 25% of all damage you deal.' },
   },
   fr: {
     'rusty-shiv':           { name: 'Éclat Rouillé',                  description: "Une lame grossière faite d'un clou cassé. Dangereuse de près si rien d'autre n'est disponible." },
@@ -360,6 +382,8 @@ export const ITEM_TEXT: Record<Locale, Record<string, ItemText>> = {
     'rope':                 { name: 'Corde Enroulée',                  description: "Neuf mètres de corde de chanvre. Pourrait être utile." },
     'village-key':          { name: 'Clé de la Maison du Village',    description: "Une simple clé de fer, pressée dans votre main par un villageois désespéré. Elle déverrouille la salle de stockage du forgeron." },
     'holy-relic':           { name: 'Relique Sainte',                  description: "Un reliquaire d'or chaud au toucher, pulsant d'une lumière divine. Portée dans la main du bouclier, elle confère de la robustesse et repousse les morts-vivants. La porter augmentera définitivement votre santé maximale." },
+    'grimoire':             { name: 'Grimoire Arcanique',              description: "Un tome de cuir brûlé crépitant de feu emprisonné. Utilisation unique — l'ouvrir libère un éclair de feu qui inflige 10 dégâts à n'importe quel ennemi, ignorant l'armure entièrement." },
+    'trinket-necklace':     { name: 'Amulette Sanguine',               description: "Un rubis sombre serti dans de l'argent terni, chaud au toucher. Il bourdonne faiblement quand le sang coule. Porté autour du cou, il siphonne la force vitale de chaque blessure que vous infligez — vous soignant de 25% de tous les dégâts que vous faites." },
   },
 };
 
@@ -460,11 +484,14 @@ export interface T {
     cant: (n: string) => string; done: (n: string, detail: string) => string;
     damageLabel: string;
     relic: (heal: number, newMax: number) => string;
+    lifeStealDetail: (pct: number) => string;
   };
   unequip: { notFound: (q: string) => string; done: (n: string) => string; };
   use: {
     what: string; notCarrying: (q: string) => string;
     cant: (n: string) => string; heal: (n: string, hp: number, cur: number, max: number) => string;
+    spell: (enemyName: string, dmg: number, enemyHp: number, enemyMaxHp: number) => string;
+    spellNoTarget: string;
   };
   search: {
     nothing: string; already: string; searching: string;
@@ -493,6 +520,7 @@ export interface T {
     drops: (names: string) => string; nextAgg: (name: string) => string;
     levelUp: (gain: number, max: number) => string;
     critical: string; surprise: string;
+    lifesteal: (heal: number, hp: number, max: number) => string;
   };
   checkpoint: {
     saved: string;
@@ -629,6 +657,7 @@ const en: T = {
     done: (n, detail) => `You equip the ${n}.${detail}`,
     damageLabel: 'damage',
     relic: (heal, newMax) => `The relic pulses with divine light! You feel your body strengthen. HP +${heal}, Max HP → ${newMax}.`,
+    lifeStealDetail: (pct) => ` [${pct}% lifesteal]`,
   },
   unequip: {
     notFound: (q) => `Nothing equipped matches "${q}".`,
@@ -639,6 +668,8 @@ const en: T = {
     notCarrying: (q) => `You're not carrying any "${q}".`,
     cant: (n) => `You can't use the ${n} that way.`,
     heal: (n, hp, cur, max) => `You use the ${n} and recover ${hp} HP. (${cur}/${max})`,
+    spell: (enemyName, dmg, enemyHp, enemyMaxHp) => `🔥 You tear open the Grimoire — a bolt of fire erupts and slams into ${enemyName} for ${dmg} damage! (${enemyHp}/${enemyMaxHp} HP)`,
+    spellNoTarget: 'The Grimoire can only be used in combat.',
   },
   search: {
     nothing: 'You search carefully but find nothing unusual.',
@@ -709,6 +740,7 @@ const en: T = {
     levelUp: (gain, max) => `★ You grow stronger! Max HP +${gain} → ${max}`,
     critical: '★ Critical! ',
     surprise: '🗡 Surprise Strike! ',
+    lifesteal: (heal, hp, max) => `♦ The amulet pulses — you drain ${heal} HP from the wound. (${hp}/${max})`,
   },
   bodyFx: {
     head: (name) => `You strike the ${name} across the head — they reel, STUNNED, and will skip their next attack!`,
@@ -866,6 +898,7 @@ const fr: T = {
     done: (n, detail) => `Vous équipez ${n}.${detail}`,
     damageLabel: 'dégâts',
     relic: (heal, newMax) => `La relique pulse d'une lumière divine ! Vous sentez votre corps se renforcer. PV +${heal}, PV max → ${newMax}.`,
+    lifeStealDetail: (pct) => ` [${pct}% vol de vie]`,
   },
   unequip: {
     notFound: (q) => `Rien d'équipé ne correspond à "${q}".`,
@@ -876,6 +909,8 @@ const fr: T = {
     notCarrying: (q) => `Vous ne transportez pas de "${q}".`,
     cant: (n) => `Vous ne pouvez pas utiliser ${n} de cette façon.`,
     heal: (n, hp, cur, max) => `Vous utilisez ${n} et récupérez ${hp} PV. (${cur}/${max})`,
+    spell: (enemyName, dmg, enemyHp, enemyMaxHp) => `🔥 Vous ouvrez le Grimoire — un éclair de feu jaillit et frappe ${enemyName} pour ${dmg} dégâts ! (${enemyHp}/${enemyMaxHp} PV)`,
+    spellNoTarget: 'Le Grimoire ne peut être utilisé qu\'en combat.',
   },
   search: {
     nothing: 'Vous cherchez avec soin mais ne trouvez rien d\'inhabituel.',
@@ -946,6 +981,7 @@ const fr: T = {
     levelUp: (gain, max) => `★ Vous devenez plus fort ! PV max +${gain} → ${max}`,
     critical: '★ Critique ! ',
     surprise: '🗡 Frappe Surprise ! ',
+    lifesteal: (heal, hp, max) => `♦ L'amulette pulse — vous drainez ${heal} PV de la blessure. (${hp}/${max})`,
   },
   bodyFx: {
     head: (name) => `Vous frappez ${name} à la tête — il vacille, ÉTOURDI, et ratera sa prochaine attaque !`,

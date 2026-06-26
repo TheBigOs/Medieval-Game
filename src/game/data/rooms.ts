@@ -89,7 +89,7 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
       id: 'crypt', ...rt['crypt'],
       exits: { east: 'undercroft' },
       items: [], enemies: [spawn('skeleton_knight')], visited: false,
-      searchable: true, hiddenItems: ['god-apple', 'healing-herbs'], searched: false,
+      searchable: true, hiddenItems: ['healing-herbs'], searched: false,
     },
 
     'kitchen': {
@@ -159,7 +159,7 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
 
     'village-road': {
       id: 'village-road', ...rt['village-road'],
-      exits: { east: 'village-house', north: 'town-center' },
+      exits: { east: 'village-house', north: 'town-center', west: 'village-house-2' },
       items: [], enemies: [], visited: false,
       npcName: rt['village-road'].npcName,
       npcDialogue: rt['village-road'].npcDialogue,
@@ -170,6 +170,24 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
       exits: { west: 'village-road' },
       items: [], enemies: [spawn('zombie'), spawn('zombie')], visited: false,
       searchable: true, hiddenItems: ['village-key'], searched: false,
+    },
+
+    'village-house-2': {
+      id: 'village-house-2', ...rt['village-house-2'],
+      exits: { east: 'village-road', north: 'village-house-3' },
+      items: [
+        ...pickRandom(['longsword', 'warhammer', 'morning-star', 'iron-mace'], 1),
+        ...pickRandom(['blessed-shield', 'iron-shield'], 1),
+        ...pickRandom(['health-potion', 'greater-health-potion'], 1),
+      ],
+      enemies: [spawn('zombie'), spawn('zombie_barkeep')], visited: false,
+    },
+
+    'village-house-3': {
+      id: 'village-house-3', ...rt['village-house-3'],
+      exits: { south: 'village-house-2' },
+      items: [], enemies: [spawn('skeleton_priest')], visited: false,
+      searchable: true, hiddenItems: ['grimoire'], searched: false,
     },
 
     'town-center': {
@@ -200,6 +218,7 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
         ...pickRandom(['half-plate', 'scale-armor', 'plate-armor'], 1),
         ...pickRandom(['silver-sword', 'battle-axe', 'halberd', 'greatsword'], 1),
         'greater-health-potion',
+        'trinket-necklace',
       ],
       enemies: [], visited: false,
     },

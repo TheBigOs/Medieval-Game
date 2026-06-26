@@ -555,6 +555,8 @@ function handleEquip(state: GameState, query: string): GameState {
   if (item.type === 'weapon' && item.damageDice) {
     const atkSign = (item.attackBonus ?? 0) >= 0 ? '+' : '';
     detail = ` [${item.damageDice} ${T.equip.damageLabel}, ${atkSign}${item.attackBonus ?? 0} to hit]`;
+  } else if (item.lifeStealPct) {
+    detail = T.equip.lifeStealDetail(item.lifeStealPct);
   }
 
   return {
@@ -566,7 +568,7 @@ function handleEquip(state: GameState, query: string): GameState {
 
 function handleUnequip(state: GameState, query: string): GameState {
   const T = getT(state.language);
-  const slots = ['weapon', 'offhand', 'body'] as const;
+  const slots = ['weapon', 'offhand', 'body', 'necklace'] as const;
   const slot = slots.find(s => {
     const it = state.player.equipped[s];
     return it && fuzzyMatch(query, it.name, it.id);
@@ -596,6 +598,30 @@ function handleUse(state: GameState, query: string): GameState {
   if (!query) return addMessages(state, [msg(T.use.what, 'error')]);
   const item = findItemInInventory(state, query);
   if (!item) return addMessages(state, [msg(T.use.notCarrying(query), 'error')]);
+
+  // Grimoire: fixed-damage fire spell, bypasses AC
+  if (item.spellDamage) {
+    if (state.phase !== 'combat') {
+      return addMessages(state, [msg(T.use.spellNoTarget, 'error')]);
+    }
+    const enemy = currentCombatEnemy(state);
+    if (!enemy) return addMessages(state, [msg(T.combat.noTarget, 'error')]);
+    const dmg = item.spellDamage;
+    const newEnemyHp = enemy.hp - dmg;
+    const updatedEnemy: EnemyInstance = { ...enemy, hp: newEnemyHp };
+    const roomId = state.player.currentRoomId;
+    const room = state.rooms[roomId];
+    const updatedEnemies = room.enemies.map(e => e.instanceId === enemy.instanceId ? updatedEnemy : e);
+    let newState: GameState = {
+      ...state,
+      player: { ...state.player, inventory: removeOneFromInventory(state.player.inventory, item) },
+      rooms: { ...state.rooms, [roomId]: { ...room, enemies: updatedEnemies } },
+      messages: [...state.messages, msg(T.use.spell(enemy.name, dmg, Math.max(0, newEnemyHp), enemy.maxHp), 'combat')],
+    };
+    if (newEnemyHp <= 0) return resolveEnemyDeath(newState, updatedEnemy);
+    return enemyTurn(newState);
+  }
+
   if (item.type !== 'consumable' || !item.healAmount) {
     return addMessages(state, [msg(T.use.cant(item.name), 'error')]);
   }
@@ -845,11 +871,25 @@ function handleAttack(state: GameState, rawTarget: string): GameState {
 
   msgs.push(enemyHpLine({ ...updatedEnemy }, state.language));
 
+  // Lifesteal from trinket necklace (only on a hit that dealt damage)
+  let lifeStealHp = newState.player.hp;
+  if (result.hit && result.damage > 0) {
+    const necklace = newState.player.equipped.necklace;
+    if (necklace?.lifeStealPct) {
+      const steal = Math.floor(result.damage * necklace.lifeStealPct / 100);
+      if (steal > 0) {
+        lifeStealHp = Math.min(newState.player.maxHp, lifeStealHp + steal);
+        msgs.push(msg(T.combat.lifesteal(steal, lifeStealHp, newState.player.maxHp), 'success'));
+      }
+    }
+  }
+
   const roomId = state.player.currentRoomId;
   const room = state.rooms[roomId];
   const updatedEnemies = room.enemies.map(e => e.instanceId === enemy.instanceId ? updatedEnemy : e);
   newState = {
     ...newState,
+    player: { ...newState.player, hp: lifeStealHp },
     rooms: { ...newState.rooms, [roomId]: { ...room, enemies: updatedEnemies } },
     messages: [...newState.messages, ...msgs],
     combat: newState.combat ? { ...newState.combat, round: newState.combat.round + 1 } : null,
@@ -1106,7 +1146,7 @@ export function createInitialState(): GameState {
       str: 12, dex: 13, con: 10,
       ac: 11,
       inventory: [],
-      equipped: { weapon: null, offhand: null, body: null },
+      equipped: { weapon: null, offhand: null, body: null, necklace: null },
       xp: 0,
       currentRoomId: 'dungeon-cell',
       previousRoomId: null,

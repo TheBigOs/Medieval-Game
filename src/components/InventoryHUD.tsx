@@ -21,6 +21,7 @@ function weaponStat(item: Item): string {
 }
 
 function armorStat(item: Item): string {
+  if (item.lifeStealPct) return `${item.lifeStealPct}% lifesteal`;
   if (!item.acBonus) return '';
   return `AC +${item.acBonus}`;
 }
@@ -44,6 +45,7 @@ const InventoryHUD: React.FC<Props> = ({ gameState }) => {
   const armors: HudEntry[] = [];
   if (equipped.body) armors.push({ item: equipped.body, isEquipped: true });
   if (equipped.offhand) armors.push({ item: equipped.offhand, isEquipped: true });
+  if (equipped.necklace) armors.push({ item: equipped.necklace, isEquipped: true });
   inventory.filter(i => i.type === 'armor').forEach(i => armors.push({ item: i, isEquipped: false }));
 
   // Group consumables: name → { count, healAmount }
