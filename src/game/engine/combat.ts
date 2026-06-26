@@ -142,7 +142,6 @@ export function playerAttack(player: Player, enemy: EnemyInstance, targetPart: B
 export function enemyAttack(enemy: EnemyInstance, player: Player): AttackResult {
   const penalties = getEnemyPenalties(enemy);
   const effectiveBonus = (enemy.baseAttackBonus ?? 0) + penalties.attackBonus;
-  const effectiveAC = enemy.ac + penalties.acMod;  // not used here but tracked elsewhere
 
   const roll = d20();
   const attackTotal = roll + effectiveBonus;

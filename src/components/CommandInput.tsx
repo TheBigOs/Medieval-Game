@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { GameState, Direction, BodyPart, BODY_PART_LABELS, ALL_BODY_PARTS, DEFAULT_BODY_STATUS } from '../game/types';
 import { getItems } from '../game/data/items';
-import { getEnemyPenalties } from '../game/engine/combat';
 import { getT } from '../game/i18n';
 
 interface Props {
