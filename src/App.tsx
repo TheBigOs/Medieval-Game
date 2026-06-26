@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useReducer, useCallback, useState, useEffect, useRef } from 'react';
 import { GameState } from './game/types';
 import { processCommand, createInitialState, returnToCheckpoint } from './game/engine/commands';
 import { getT } from './game/i18n';
@@ -37,6 +37,26 @@ const App: React.FC = () => {
     dispatch({ type: 'CHECKPOINT' });
   }, []);
 
+  // Combat flash overlay
+  const [combatFlash, setCombatFlash] = useState<{ type: 'hit' | 'miss'; id: number } | null>(null);
+  const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flashId = useRef(0);
+  const prevMsgCount = useRef(0);
+
+  useEffect(() => {
+    const newMsgs = state.messages.slice(prevMsgCount.current);
+    prevMsgCount.current = state.messages.length;
+    for (const m of newMsgs) {
+      if (m.type === 'player-hit' || m.type === 'player-miss') {
+        if (flashTimer.current) clearTimeout(flashTimer.current);
+        flashId.current += 1;
+        setCombatFlash({ type: m.type === 'player-hit' ? 'hit' : 'miss', id: flashId.current });
+        flashTimer.current = setTimeout(() => setCombatFlash(null), 750);
+        break;
+      }
+    }
+  }, [state.messages]);
+
   const isEnded = state.phase === 'game_over' || state.phase === 'victory';
   const T = getT(state.language);
 
@@ -46,6 +66,11 @@ const App: React.FC = () => {
       <div className="content-area">
         <MessageLog messages={state.messages} />
         <InventoryHUD gameState={state} />
+        {combatFlash && (
+          <div key={combatFlash.id} className={`combat-flash combat-flash-${combatFlash.type}`}>
+            {combatFlash.type === 'hit' ? 'HIT!' : 'MISS'}
+          </div>
+        )}
       </div>
       <CommandInput gameState={state} onCommand={handleCommand} />
       {isEnded && (

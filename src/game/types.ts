@@ -1,7 +1,7 @@
 export type Direction = 'north' | 'south' | 'east' | 'west';
 export type ItemType = 'weapon' | 'armor' | 'consumable' | 'utility' | 'key';
 export type GamePhase = 'language-select' | 'exploring' | 'combat' | 'game_over' | 'victory' | 'post-escape';
-export type MessageType = 'narrative' | 'combat' | 'loot' | 'error' | 'system' | 'success' | 'roll';
+export type MessageType = 'narrative' | 'combat' | 'loot' | 'error' | 'system' | 'success' | 'roll' | 'player-hit' | 'player-miss';
 export type EquipSlot = 'weapon' | 'offhand' | 'body' | 'necklace';
 
 // ── Body Part System ───────────────────────────────────────────────────────

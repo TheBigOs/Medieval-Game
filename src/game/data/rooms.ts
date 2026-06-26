@@ -54,7 +54,7 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
       exits: { west: 'guard-post' },
       items: [
         ...pickRandom(['short-sword', 'hand-axe', 'warhammer', 'morning-star', 'battle-axe'], 2),
-        ...pickRandom(['leather-armor', 'scale-armor', 'iron-shield'], 1),
+        ...pickRandom(['leather-armor', 'wooden-shield'], 1),
       ],
       enemies: [], visited: false,
     },
@@ -68,7 +68,7 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
     'barracks': {
       id: 'barracks', ...rt['barracks'],
       exits: { east: 'corridor', north: 'charnel-chamber' },
-      items: ['health-potion', ...pickRandom(['hand-axe', 'warhammer', 'iron-mace', 'morning-star'], 1)],
+      items: ['health-potion', ...pickRandom(['hand-axe', 'scale-armor', 'iron-mace', 'morning-star'], 1)],
       enemies: [], visited: false,
     },
 
@@ -89,7 +89,7 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
       id: 'crypt', ...rt['crypt'],
       exits: { east: 'undercroft' },
       items: [], enemies: [spawn('skeleton_knight')], visited: false,
-      searchable: true, hiddenItems: ['healing-herbs'], searched: false,
+      searchable: true, hiddenItems: ['god-apple', 'healing-herbs'], searched: false,
     },
 
     'kitchen': {

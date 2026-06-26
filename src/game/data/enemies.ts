@@ -60,7 +60,7 @@ const TEMPLATES: Record<string, EnemyTemplate> = {
     attackBonus: 5,
     damageDice: '1d8+2',
     xp: 44,
-    loot: ['longsword', 'chainmail', 'god-apple'],
+    loot: ['longsword', 'chainmail'],
     aggressive: true,
   },
   cook: {

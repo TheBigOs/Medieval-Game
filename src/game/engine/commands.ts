@@ -852,12 +852,12 @@ function handleAttack(state: GameState, rawTarget: string): GameState {
 
   const snkStr = sneakBonus ? `+${sneakBonus}(sneak)` : '';
   if (result.miss) {
-    msgs.push(msg(T.combat.playerMiss(partLabel.toLowerCase()), 'combat'));
+    msgs.push(msg(T.combat.playerMiss(partLabel.toLowerCase()), 'player-miss'));
   } else if (result.hit) {
     const pre = result.critical ? T.combat.critical : wasSneaking ? T.combat.surprise : '';
-    msgs.push(msg(T.combat.playerHit(pre, enemy.name, partLabel.toLowerCase(), result.damage, result.d20Roll, snkStr, enemy.ac), 'combat'));
+    msgs.push(msg(T.combat.playerHit(pre, enemy.name, partLabel.toLowerCase(), result.damage, result.d20Roll, snkStr, enemy.ac), 'player-hit'));
   } else {
-    msgs.push(msg(T.combat.playerNearMiss(partLabel.toLowerCase(), result.d20Roll, snkStr, enemy.ac), 'combat'));
+    msgs.push(msg(T.combat.playerNearMiss(partLabel.toLowerCase(), result.d20Roll, snkStr, enemy.ac), 'player-miss'));
   }
 
   const newEnemyHp = enemy.hp - result.damage;
