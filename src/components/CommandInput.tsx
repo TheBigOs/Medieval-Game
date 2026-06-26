@@ -40,6 +40,13 @@ function buildChips(state: GameState): Chip[] {
     return chips;
   }
 
+  // Post-escape choice
+  if (phase === 'post-escape') {
+    chips.push({ label: T.postEscape.escapeChip, command: 'escape', variant: 'nav' });
+    chips.push({ label: T.postEscape.continueChip, command: 'continue', variant: 'combat' });
+    return chips;
+  }
+
   if (phase === 'game_over' || phase === 'victory') return chips;
 
   const room = rooms[player.currentRoomId];

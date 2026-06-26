@@ -2,7 +2,7 @@ export type Locale = 'en' | 'fr';
 
 // ── Room text ──────────────────────────────────────────────────────────────
 
-export interface RoomText { name: string; description: string; shortDescription: string; }
+export interface RoomText { name: string; description: string; shortDescription: string; npcName?: string; npcDialogue?: string; }
 
 export const ROOM_TEXT: Record<Locale, Record<string, RoomText>> = {
   en: {
@@ -84,6 +84,54 @@ export const ROOM_TEXT: Record<Locale, Record<string, RoomText>> = {
       description: "A cramped office crammed with shelves of glass vessels, dog-eared tomes, and star charts pinned askew to the walls. The reek of sulphur and old parchment fills the room. A young man in ink-stained robes spins around from a cluttered workbench, eyes wide — then suddenly fierce. Power crackles visibly at his fingertips.",
       shortDescription: "Wizard's office. Shelves of arcana. The apprentice is here. Exit east.",
     },
+    // ── Village ──────────────────────────────────────────────────────────────
+    'village-road': {
+      name: 'Road to Helmwick',
+      description: 'The portcullis crashes shut behind you. Cold night air floods your lungs after days of dungeon reek — the simple shock of it nearly buckles your knees. A dirt track stretches north into the dark, lit only by a pale moon. Then something moves. A figure lurches from the treeline: a man in a torn peasant coat, face grey with terror, hands shaking. He grabs your arm with desperate strength.\n\n"Thank the gods — a living soul! Please, you must help us. Helmwick — our village — it is being destroyed. A necromancer came a fortnight ago. He raised every grave and cursed the living. People are turning. We cannot fight them. You are the only one who has come out of that castle alive in years. Please." He points north, toward the glow of distant, sickly witchlight.\n\nType "talk" to hear more, or choose your path.',
+      shortDescription: 'The road outside Castle Mordenthal. Helmwick lies to the north. The desperate villager stands here.',
+      npcName: 'Desperate Villager',
+      npcDialogue: '"His name is Malachar — the necromancer. He has made the Town Hall his throne room. He never leaves. Kill him and the curse dies with him. The church still has some power — seek the holy relic on the altar. And watch out for the well in the square. Three men fell in it before we stopped going near it." The man presses something into your palm. "My house key. Anything that was mine is yours now. Just end this."',
+    },
+    'village-house': {
+      name: 'Abandoned Village House',
+      description: 'What was once a cosy home is now a scene of horror. Furniture is overturned, crockery smashed, a child\'s doll face-down in the corner. The cold hearth has not burned in weeks. Two former villagers — now slack-jawed, stinking, lurching undead — turn toward you with empty hunger. They were someone\'s family.',
+      shortDescription: 'Abandoned village house. Two zombies wander inside. Exit west.',
+    },
+    'town-center': {
+      name: 'Helmwick Town Square',
+      description: 'The heart of Helmwick is a ruin. Market stalls are smashed to splinters. The communal fountain runs dry and black. In the center of the square stands an old stone well — deep, dark, and swaying its bucket in the night wind. Two zombies shuffle aimlessly between the wreckage. Streets lead east to the inn, west to the forge, and north to the church.',
+      shortDescription: 'Helmwick town square. Two zombies. An old stone well stands here — do not search it.',
+    },
+    'inn': {
+      name: 'The Drunken Goat Inn',
+      description: 'The inn\'s common room reeks of spilled ale and old rot. Tables and chairs are smashed flat. Behind the bar, a bloated figure in a barkeep\'s apron drags itself upright — a bottle raised to smash. Two more dead patrons lurch from overturned booth seats, bar stools clattering as they rise.',
+      shortDescription: 'The Drunken Goat Inn. Zombie barkeep and two zombie patrons. Exit west.',
+    },
+    'blacksmith': {
+      name: 'Helmwick Forge',
+      description: "The forge stands cold — no fire has burned here since the curse fell. Hammers and tongs hang silent on soot-darkened walls. A massive zombie in a scorched leather apron lumbers toward you from behind the anvil, dragging a length of chain. To the north, a heavy iron door bears a keyhole — the smith's locked storage room.",
+      shortDescription: "Helmwick forge. A forge zombie. Locked storage room north — needs a key.",
+    },
+    'blacksmith-vault': {
+      name: "Blacksmith's Vault",
+      description: 'The storage room behind the forge is cool and dry. Shelves line the walls, stacked with the blacksmith\'s finest work — armor, blades, and tools laid out with a craftsman\'s pride. Whoever ran this forge was skilled. Most of the stock is still here, untouched by the undead.',
+      shortDescription: "Blacksmith's vault. The smith's finest work. Exit south.",
+    },
+    'church': {
+      name: 'Church of the Fallen Light',
+      description: 'The village church has been desecrated. Holy symbols are smashed, the altar defaced with dark sigils written in dried blood. Two skeleton warriors in tattered priestly robes stand vigil before the altar — former clergy, now animated by the necromancer\'s corruption. They turn at your entry, hollow sockets glowing with cold blue light.\n\nYet on the altar, amid the ruin, one object remains untouched: a golden reliquary that pulses with faint, warm light. The darkness cannot seem to reach it.',
+      shortDescription: 'Desecrated church. Two skeleton priests. A holy relic rests on the altar. East: cemetery. North: town hall.',
+    },
+    'cemetery': {
+      name: 'Helmwick Cemetery',
+      description: 'Every grave in Helmwick has been opened from the inside. Mounds of overturned earth mark where each sleeper was dragged back. Tombstones toppled. The smell is overwhelming.\n\nThree rotting villagers claw their way between the markers. Worse still: two ghouls crouch low between the tombs — lean, fast, and far more dangerous than any shambling dead. Their pale eyes fix on you with something close to intelligence.',
+      shortDescription: 'Helmwick cemetery. Three tomb zombies and two ghouls. A brutal fight.',
+    },
+    'town-hall': {
+      name: 'Helmwick Town Hall',
+      description: "You push open the great doors and the air turns to ice. The hall has been remade into a throne room of death. Pale magefire brackets the walls. At the far end, upon a throne built from the bones of the village council, sits the Arch-Lich Necromancer.\n\nHis skeletal form is swathed in dark robes that seem to drink the light. A crown of black iron sits above hollow eye sockets burning with violet flame. He does not rise as you enter. When he speaks, the voice resonates inside your skull rather than in your ears:\n\n\"Another meddler climbs my steps. How refreshingly tiresome.\"",
+      shortDescription: 'Helmwick town hall. The Arch-Lich Necromancer sits on his throne of bones.',
+    },
   },
   fr: {
     'dungeon-cell': {
@@ -158,6 +206,54 @@ export const ROOM_TEXT: Record<Locale, Record<string, RoomText>> = {
       description: "Un bureau encombré de bocaux en verre, de grimoires cornés et de cartes des étoiles épinglées de travers sur les murs. La puanteur de soufre et de vieux parchemin emplit la pièce. Un jeune homme en robes tachées d'encre se retourne brusquement d'un établi encombré, les yeux écarquillés — puis soudain féroces. Une puissance crépite visiblement au bout de ses doigts.",
       shortDescription: 'Bureau du sorcier. Étagères d\'arcanes. L\'apprenti est là. Sortie à l\'est.',
     },
+    // ── Village ──────────────────────────────────────────────────────────────
+    'village-road': {
+      name: 'Route vers Helmwick',
+      description: "La herse se referme en fracas derrière vous. L'air froid de la nuit emplit vos poumons après des jours d'air vicié du donjon — le simple choc failli vous faire fléchir les genoux. Un chemin de terre s'étend vers le nord dans l'obscurité. Puis quelque chose bouge. Une silhouette surgit des arbres : un homme en manteau de paysan déchiré, le visage gris de terreur, les mains tremblantes. Il vous saisit le bras avec une force désespérée.\n\n\"Dieu merci — une âme vivante ! S'il vous plaît, vous devez nous aider. Helmwick — notre village — il est en train d'être détruit. Un nécromancien est venu il y a deux semaines. Il a ressuscité tous les morts et maudit les vivants. Vous êtes le seul à être sorti de ce château vivant depuis des années. Je vous en supplie.\" Il pointe vers le nord, vers une lueur de sorcellerie blafarde.\n\nTapez \"parler\" pour en savoir plus, ou choisissez votre chemin.",
+      shortDescription: 'La route hors du Château Mordenthal. Helmwick est au nord. Le villageois désespéré se tient ici.',
+      npcName: 'Villageois Désespéré',
+      npcDialogue: '"Il s\'appelle Malachar — le nécromancien. Il a fait de l\'Hôtel de Ville son trône. Il ne quitte jamais cet endroit. Tuez-le et la malédiction mourra avec lui. L\'église a encore un peu de pouvoir — cherchez la relique sainte sur l\'autel. Et méfiez-vous du puits sur la place. Trois hommes y sont tombés avant qu\'on cesse d\'en approcher." L\'homme glisse quelque chose dans votre paume. "La clé de ma maison. Tout ce qui m\'appartient est à vous. Mettez fin à cela."',
+    },
+    'village-house': {
+      name: 'Maison de Village Abandonnée',
+      description: "Ce qui fut jadis un foyer chaleureux est maintenant une scène d'horreur. Les meubles sont renversés, la vaisselle brisée, une poupée d'enfant face contre terre dans un coin. Le foyer froid n'a pas brûlé depuis des semaines. Deux anciens villageois — désormais titubants et puants — se retournent vers vous avec une faim vide. Ils étaient la famille de quelqu'un.",
+      shortDescription: 'Maison de village abandonnée. Deux zombies à l\'intérieur. Sortie à l\'ouest.',
+    },
+    'town-center': {
+      name: 'Place du Village de Helmwick',
+      description: "Le cœur de Helmwick est en ruine. Les étals du marché sont réduits en éclats. La fontaine publique est à sec et noircie. Au centre de la place se dresse un vieux puits de pierre — profond, sombre, son seau se balançant dans le vent nocturne. Deux zombies errent sans but parmi les décombres. Les rues mènent à l'est vers l'auberge, à l'ouest vers la forge, et au nord vers l'église.",
+      shortDescription: "Place du village de Helmwick. Deux zombies. Un vieux puits de pierre est là — ne le fouillez pas.",
+    },
+    'inn': {
+      name: 'L\'Auberge de la Chèvre Ivre',
+      description: "La salle commune de l'auberge pue la bière renversée et la vieille pourriture. Tables et chaises sont brisées. Derrière le bar, une silhouette bouffie dans un tablier de cabaretier se redresse — une bouteille levée pour frapper. Deux autres clients morts se lèvent des banquettes renversées.",
+      shortDescription: "L'Auberge de la Chèvre Ivre. Zombie barman et deux clients zombies. Sortie à l'ouest.",
+    },
+    'blacksmith': {
+      name: 'La Forge de Helmwick',
+      description: "La forge est froide — aucun feu n'a brûlé ici depuis la malédiction. Marteaux et tenailles pendent silencieux sur les murs noircis de suie. Un zombie massif dans un tablier de cuir brûlé s'avance depuis derrière l'enclume, traînant une chaîne. Au nord, une lourde porte de fer porte un trou de serrure — la salle de stockage verrouillée du forgeron.",
+      shortDescription: "La forge de Helmwick. Un zombie de forge. Salle de stockage verrouillée au nord — nécessite une clé.",
+    },
+    'blacksmith-vault': {
+      name: 'Réserve du Forgeron',
+      description: "La salle de stockage derrière la forge est fraîche et sèche. Des étagères tapissent les murs, chargées du meilleur travail du forgeron — armures, lames et outils disposés avec la fierté d'un artisan. Celui qui dirigeait cette forge était talentueux. La plupart des stocks sont encore là, intacts.",
+      shortDescription: "Réserve du forgeron. Le meilleur travail du forgeron. Sortie au sud.",
+    },
+    'church': {
+      name: 'Église de la Lumière Déchue',
+      description: "L'église du village a été profanée. Les symboles saints sont brisés, l'autel défigurer de sigils noirs écrits en sang séché. Deux guerriers squelettes en robes sacerdotales déchirées montent la garde devant l'autel — anciens clercs, désormais animés par la corruption du nécromancien. Ils se retournent à votre entrée, leurs orbites creuses brillant d'une froide lumière bleue.\n\nPourtant, sur l'autel, au milieu de la ruine, un objet reste intact : un reliquaire d'or qui pulse d'une douce lumière chaude. Les ténèbres ne semblent pas pouvoir l'atteindre.",
+      shortDescription: "Église profanée. Deux prêtres squelettes. Une relique sainte sur l'autel. Est : cimetière. Nord : hôtel de ville.",
+    },
+    'cemetery': {
+      name: 'Cimetière de Helmwick',
+      description: "Chaque tombe de Helmwick a été ouverte de l'intérieur. Des monticules de terre retournée marquent l'endroit où chaque dormeur a été rappelé. Stèles renversées. L'odeur est accablante.\n\nTrois villageois putréfiés se faufilent entre les pierres tombales. Pire encore : deux goules se tiennent basses entre les tombes — maigres, rapides, et bien plus dangereuses que n'importe quel mort errant. Leurs yeux pâles se fixent sur vous avec quelque chose qui ressemble à de l'intelligence.",
+      shortDescription: 'Cimetière de Helmwick. Trois zombies de tombes et deux goules. Un combat brutal.',
+    },
+    'town-hall': {
+      name: 'Hôtel de Ville de Helmwick',
+      description: "Vous poussez les grandes portes et l'air se transforme en glace. La salle a été refaite en salle du trône de la mort. Un feu de sorcier pâle illumine les murs. Au fond, sur un trône construit à partir des ossements du conseil municipal, est assis le Nécromancien Archilliche.\n\nSa forme squelettique est enveloppée de robes noires qui semblent absorber la lumière. Une couronne de fer noir surmonte des orbites vides brûlant d'une flamme violette. Il ne se lève pas à votre entrée. Quand il parle, sa voix résonne dans votre crâne plutôt que dans vos oreilles :\n\n\"Encore un indiscret qui monte mes marches. Comme c'est lassant.\"",
+      shortDescription: "Hôtel de ville de Helmwick. Le Nécromancien Archilliche siège sur son trône d'ossements.",
+    },
   },
 };
 
@@ -229,6 +325,8 @@ export const ITEM_TEXT: Record<Locale, Record<string, ItemText>> = {
     'holy-water':           { name: 'Vial of Holy Water',             description: 'Blessed water in a sealed crystal vial. Drinkable in a pinch — faintly bitter, oddly restorative. Restores 6 HP.' },
     'rusty-key':            { name: 'Rusty Iron Key',                 description: 'A heavy iron key, thick with rust. It looks like it fits the lock on the cell door.' },
     'rope':                 { name: 'Coiled Rope',                    description: 'Thirty feet of hempen rope. Could be useful.' },
+    'village-key':          { name: 'Village House Key',              description: "A plain iron key, pressed into your hand by a desperate villager. It unlocks the blacksmith's storage room." },
+    'holy-relic':           { name: 'Holy Relic',                    description: 'A golden reliquary warm to the touch, pulsing with divine light. Carried in the shield hand, it grants fortitude and wards off undead. Equipping it will permanently increase your maximum health.' },
   },
   fr: {
     'rusty-shiv':           { name: 'Éclat Rouillé',                  description: "Une lame grossière faite d'un clou cassé. Dangereuse de près si rien d'autre n'est disponible." },
@@ -260,6 +358,8 @@ export const ITEM_TEXT: Record<Locale, Record<string, ItemText>> = {
     'holy-water':           { name: "Fiole d'Eau Bénite",              description: "Eau bénite dans une fiole de cristal scellée. Buvable à la rigueur — légèrement amère, étrangement revitalisante. Restaure 6 PV." },
     'rusty-key':            { name: 'Clé de Fer Rouillée',             description: "Une lourde clé de fer, couverte de rouille. Elle semble convenir au verrou de la porte de la cellule." },
     'rope':                 { name: 'Corde Enroulée',                  description: "Neuf mètres de corde de chanvre. Pourrait être utile." },
+    'village-key':          { name: 'Clé de la Maison du Village',    description: "Une simple clé de fer, pressée dans votre main par un villageois désespéré. Elle déverrouille la salle de stockage du forgeron." },
+    'holy-relic':           { name: 'Relique Sainte',                  description: "Un reliquaire d'or chaud au toucher, pulsant d'une lumière divine. Portée dans la main du bouclier, elle confère de la robustesse et repousse les morts-vivants. La porter augmentera définitivement votre santé maximale." },
   },
 };
 
@@ -282,6 +382,13 @@ export const ENEMY_TEXT: Record<Locale, Record<string, EnemyText>> = {
     'wizard_apprentice': { name: "Wizard's Apprentice",   description: 'A young man in ink-stained robes clutching a gnarled staff. His eyes flash with panic — and dangerous power.' },
     'stable_raider':     { name: 'Stable Raider',         description: 'A brigand who has taken shelter in the stables, armed and desperate. He levels a crossbow at you from the shadows.' },
     'dormitory_soldier': { name: 'Castle Soldier',        description: 'An armed soldier caught resting in the dormitory. He scrambles to his feet, sword already in hand.' },
+    'zombie':            { name: 'Village Zombie',         description: 'A former villager, now a shambling husk of rot and hunger. Its jaw hangs slack, eyes clouded white. It moves with awful, inevitable slowness.' },
+    'zombie_barkeep':    { name: 'Zombie Barkeep',         description: 'Still wearing its stained apron, the dead innkeeper lurches forward with a broken bottle raised. It remembers nothing of the life it had.' },
+    'forge_zombie':      { name: 'Forge Zombie',           description: "A massive dead man in a blacksmith's apron, dragging a length of heavy chain. The curse has made it stronger than it was alive." },
+    'skeleton_priest':   { name: 'Skeleton Priest',        description: 'A former clergyman reduced to animated bone, its priestly robes tattered, hollow eye sockets burning with corrupt blue light. It raises its staff against you.' },
+    'ghoul':             { name: 'Ghoul',                  description: 'Lower and faster than any zombie, this thing moves on all fours between the gravestones. Its long fingers end in yellow claws. It fixes you with pale, hungry eyes that show something uncomfortably close to cunning.' },
+    'tomb_zombie':       { name: 'Tomb Zombie',            description: 'Freshly dragged from its grave, this zombie is still encrusted with grave-dirt and rotting burial cloth. Fragile, but there are more of them than you would like.' },
+    'arch_lich':         { name: 'Arch-Lich Necromancer',  description: 'Malachar the Undying sits upon a throne of bones in dark robes that drink the light. A crown of black iron. Violet fire in empty sockets. Centuries of dark power gathered in one skeletal form. He regards you with vast, cold amusement — and then raises one hand.' },
   },
   fr: {
     'guard':             { name: 'Garde du Château',       description: "Un soldat humain en armure de cuir, la main sur son épée. Il a l'air groggy — vous l'avez peut-être surpris en plein somme." },
@@ -297,6 +404,13 @@ export const ENEMY_TEXT: Record<Locale, Record<string, EnemyText>> = {
     'wizard_apprentice': { name: 'Apprenti Sorcier',       description: "Un jeune homme en robes tachées d'encre brandissant un bâton noueux. Ses yeux brillent de panique — et d'un pouvoir dangereux." },
     'stable_raider':     { name: 'Pillard des Écuries',    description: "Un brigand réfugié dans les écuries, armé et désespéré. Il braque une arbalète sur vous depuis les ombres." },
     'dormitory_soldier': { name: 'Soldat du Château',      description: "Un soldat armé surpris en train de se reposer dans le dortoir. Il se lève d'un bond, son épée déjà en main." },
+    'zombie':            { name: 'Zombie du Village',       description: "Un ancien villageois, désormais une enveloppe putréfiée affamée. Sa mâchoire pend, ses yeux sont d'un blanc laiteux. Il avance avec une lenteur inéluctable et terrible." },
+    'zombie_barkeep':    { name: 'Zombie Cabaretier',       description: "Portant encore son tablier taché, le cabaretier mort s'avance avec une bouteille brisée levée. Il ne se souvient plus de la vie qu'il menait." },
+    'forge_zombie':      { name: 'Zombie de Forge',         description: "Un homme massif en tablier de forgeron, traînant une lourde chaîne. La malédiction l'a rendu plus fort qu'il ne l'était de son vivant." },
+    'skeleton_priest':   { name: 'Prêtre Squelette',        description: "Un ancien clerc réduit à des os animés, ses robes sacerdotales en lambeaux, ses orbites creuses brûlant d'une lumière bleue corrompue. Il lève son bâton contre vous." },
+    'ghoul':             { name: 'Goule',                   description: "Plus basse et plus rapide que n'importe quel zombie, cette créature se déplace à quatre pattes entre les pierres tombales. Ses longs doigts se terminent en griffes jaunes. Elle vous fixe d'yeux pâles et affamés qui montrent quelque chose d'inconfortablement proche de la ruse." },
+    'tomb_zombie':       { name: 'Zombie de Tombe',         description: "Fraîchement arraché de sa tombe, ce zombie est encore incrusté de terre et de linceul pourri. Fragile, mais ils sont plus nombreux que vous ne le souhaiteriez." },
+    'arch_lich':         { name: 'Nécromancien Archilliche', description: "Malachar l'Immortel siège sur un trône d'ossements dans des robes noires qui boivent la lumière. Une couronne de fer noir. Du feu violet dans des orbites vides. Des siècles de pouvoir sombre rassemblés dans une seule forme squelettique. Il vous considère avec un amusement vaste et froid — puis lève une main." },
   },
 };
 
@@ -345,6 +459,7 @@ export interface T {
     what: string; notCarrying: (q: string) => string;
     cant: (n: string) => string; done: (n: string, detail: string) => string;
     damageLabel: string;
+    relic: (heal: number, newMax: number) => string;
   };
   unequip: { notFound: (q: string) => string; done: (n: string) => string; };
   use: {
@@ -354,6 +469,7 @@ export interface T {
   search: {
     nothing: string; already: string; searching: string;
     found: (names: string) => string; nothingElse: string;
+    needKey: string;
   };
   stats: {
     header: string; hp: (hp: number, max: number) => string; acxp: (ac: number, xp: number) => string;
@@ -372,11 +488,17 @@ export interface T {
     enemyFumble: (name: string) => string;
     enemyHit: (pre: string, name: string, dmg: number, roll: number) => string;
     enemyMiss: (name: string, roll: number, ac: number) => string;
-    playerDeath: string; gameOver: string; gameOverHint: string;
+    playerDeath: string; gameOver: string; gameOverHint: string; checkpointHint: string;
     enemyFalls: (name: string) => string; xpGain: (xp: number) => string;
     drops: (names: string) => string; nextAgg: (name: string) => string;
     levelUp: (gain: number, max: number) => string;
     critical: string; surprise: string;
+  };
+  checkpoint: {
+    saved: string;
+    returnTitle: string;
+    returnMsg: string;
+    returnBtn: string;
   };
   bodyFx: {
     head: (name: string) => string; chest: (name: string) => string;
@@ -400,7 +522,29 @@ export interface T {
     fightingLabel: string; stunned: string; disarmed: string; crippled: string;
     placeholder: string;
   };
+  invHud: {
+    title: string;
+    weapons: string;
+    armor: string;
+    consumables: string;
+    equipped: string;
+  };
   unknownCmd: (raw: string) => string;
+  postEscape: {
+    burst: string; free: string; encounter: string;
+    quest: string; choice: string;
+    escapeChip: string; continueChip: string;
+    escaped: string;
+  };
+  well: {
+    search: string;
+    fall: (dmg: number, hp: number, max: number) => string;
+  };
+  talk: { what: string; noOne: string; };
+  finalVictory: {
+    lichFalls: string; curseLifted: string; gratitude: string;
+    title: string; xp: (xp: number) => string;
+  };
 }
 
 // ── English ────────────────────────────────────────────────────────────────
@@ -484,6 +628,7 @@ const en: T = {
     cant: (n) => `The ${n} cannot be equipped.`,
     done: (n, detail) => `You equip the ${n}.${detail}`,
     damageLabel: 'damage',
+    relic: (heal, newMax) => `The relic pulses with divine light! You feel your body strengthen. HP +${heal}, Max HP → ${newMax}.`,
   },
   unequip: {
     notFound: (q) => `Nothing equipped matches "${q}".`,
@@ -501,6 +646,7 @@ const en: T = {
     searching: 'You search the area carefully...',
     found: (names) => `You find: ${names}!`,
     nothingElse: 'Nothing else of note.',
+    needKey: 'The chest is locked. You need a key to open it.',
   },
   stats: {
     header: '── Character ─────────────────',
@@ -554,7 +700,8 @@ const en: T = {
     enemyMiss: (name, roll, ac) => `The ${name} attacks but fails to connect. (rolled ${roll} vs AC ${ac})`,
     playerDeath: '\nYour vision darkens. The cold stone rushes up to meet you.',
     gameOver: '★  GAME OVER  ★  You have been defeated.',
-    gameOverHint: 'Press "New Game" to start over.',
+    gameOverHint: 'Press "New Game" to start a fresh run.',
+    checkpointHint: '↩  Your village checkpoint is still active — you can return to it with your gear.',
     enemyFalls: (name) => `The ${name} falls, defeated.`,
     xpGain: (xp) => `+${xp} XP`,
     drops: (names) => `Dropped: ${names}.`,
@@ -596,7 +743,45 @@ const en: T = {
     fightingLabel: '⚔ FIGHTING', stunned: 'STUNNED', disarmed: 'DISARMED', crippled: 'CRIPPLED',
     placeholder: 'Enter a command…  (↑↓ for history)',
   },
+  invHud: {
+    title: 'INVENTORY',
+    weapons: 'Weapons',
+    armor: 'Armor & Shield',
+    consumables: 'Consumables',
+    equipped: 'EQ',
+  },
   unknownCmd: (raw) => `Unknown command: "${raw}". Type "help" for commands.`,
+  checkpoint: {
+    saved: '[ Checkpoint saved — you can return here if you fall. ]',
+    returnTitle: '↩  RETURNING TO CHECKPOINT',
+    returnMsg: 'You regain consciousness at the village road. Your wounds have closed. The villager helps you to your feet, eyes wide. "You\'re alive! Try again — Helmwick needs you."',
+    returnBtn: '↩ Village Checkpoint',
+  },
+  postEscape: {
+    burst: 'You crank the portcullis winch with shaking arms. The iron gate groans upward.',
+    free: 'Beyond it: open air. A frozen courtyard. The road out. You walk through.',
+    encounter: 'But the road is not empty. A figure lurches from the treeline — a desperate villager, face pale with terror.',
+    quest: '"Please! You must help us! Helmwick — our village — the necromancer has raised all the dead and we cannot fight them. You are the only one who has escaped that castle in years. PLEASE."',
+    choice: 'What do you do?',
+    escapeChip: '🏃 Escape and live',
+    continueChip: '⚔ Help the village',
+    escaped: '\n★  VICTORY  ★  You escaped Castle Mordenthal and left its horrors behind forever.',
+  },
+  well: {
+    search: 'You lean over the lip of the old stone well to peer inside — and the ancient mortar crumbles beneath your weight.',
+    fall: (dmg, hp, max) => `You plunge into icy black water. You claw your way out gasping, battered and freezing. You take ${dmg} damage. (${hp}/${max} HP)`,
+  },
+  talk: {
+    what: 'Talk to whom?',
+    noOne: 'There is no one here to talk to.',
+  },
+  finalVictory: {
+    lichFalls: "The Arch-Lich Malachar lets out a sound like a hundred voices screaming at once. His skeletal form crumbles — bones clattering to the floor, dark robes collapsing into ash. The violet flame in his eye sockets gutters and dies.",
+    curseLifted: 'A shockwave of light explodes outward from the crumbling throne. Across Helmwick, the dead fall. Every grave closes. The witchlight fades.',
+    gratitude: 'Silence. For the first time in weeks, true, clean silence fills the village.',
+    title: '\n★  TRUE VICTORY  ★  The curse of Helmwick is broken. Malachar is no more.',
+    xp: (xp) => `Final XP: ${xp}`,
+  },
 };
 
 // ── French ─────────────────────────────────────────────────────────────────
@@ -680,6 +865,7 @@ const fr: T = {
     cant: (n) => `${n} ne peut pas être équipé.`,
     done: (n, detail) => `Vous équipez ${n}.${detail}`,
     damageLabel: 'dégâts',
+    relic: (heal, newMax) => `La relique pulse d'une lumière divine ! Vous sentez votre corps se renforcer. PV +${heal}, PV max → ${newMax}.`,
   },
   unequip: {
     notFound: (q) => `Rien d'équipé ne correspond à "${q}".`,
@@ -697,6 +883,7 @@ const fr: T = {
     searching: 'Vous fouilllez la zone soigneusement...',
     found: (names) => `Vous trouvez : ${names} !`,
     nothingElse: "Rien d'autre d'intéressant.",
+    needKey: 'Le coffre est verrouillé. Vous avez besoin d\'une clé pour l\'ouvrir.',
   },
   stats: {
     header: '── Personnage ────────────────',
@@ -750,7 +937,8 @@ const fr: T = {
     enemyMiss: (name, roll, ac) => `${name} attaque mais n'arrive pas à toucher. (lancé ${roll} contre CA ${ac})`,
     playerDeath: '\nVotre vision s\'obscurcit. La pierre froide se précipite à votre rencontre.',
     gameOver: '★  PARTIE TERMINÉE  ★  Vous avez été vaincu.',
-    gameOverHint: 'Appuyez sur "Nouvelle Partie" pour recommencer.',
+    gameOverHint: 'Appuyez sur "Nouvelle Partie" pour recommencer depuis le début.',
+    checkpointHint: '↩  Votre point de contrôle du village est toujours actif — vous pouvez y retourner avec votre équipement.',
     enemyFalls: (name) => `${name} tombe, vaincu.`,
     xpGain: (xp) => `+${xp} XP`,
     drops: (names) => `Lâché : ${names}.`,
@@ -792,7 +980,45 @@ const fr: T = {
     fightingLabel: '⚔ COMBAT', stunned: 'ÉTOURDI', disarmed: 'DÉSARMÉ', crippled: 'ESTROPIÉ',
     placeholder: 'Entrez une commande…  (↑↓ pour l\'historique)',
   },
+  invHud: {
+    title: 'INVENTAIRE',
+    weapons: 'Armes',
+    armor: 'Armure & Bouclier',
+    consumables: 'Consommables',
+    equipped: 'EQ',
+  },
   unknownCmd: (raw) => `Commande inconnue : "${raw}". Tapez "aide" pour les commandes.`,
+  checkpoint: {
+    saved: '[ Point de contrôle sauvegardé — vous pouvez revenir ici si vous tombez. ]',
+    returnTitle: '↩  RETOUR AU POINT DE CONTRÔLE',
+    returnMsg: 'Vous reprenez connaissance sur la route du village. Vos blessures se sont refermées. Le villageois vous aide à vous relever, les yeux écarquillés. "Vous êtes vivant ! Réessayez — Helmwick a besoin de vous."',
+    returnBtn: '↩ Point de Contrôle',
+  },
+  postEscape: {
+    burst: 'Vous actionnez le treuil de la herse avec des bras tremblants. La grille de fer grince en remontant.',
+    free: 'Au-delà : l\'air libre. Une cour gelée. La route vers la liberté. Vous franchissez la porte.',
+    encounter: 'Mais la route n\'est pas déserte. Une silhouette surgit des arbres — un villageois désespéré, le visage blême de terreur.',
+    quest: '"S\'il vous plaît ! Vous devez nous aider ! Helmwick — notre village — le nécromancien a ressuscité tous les morts et nous ne pouvons pas les combattre. Vous êtes le seul à s\'être échappé de ce château depuis des années. S\'IL VOUS PLAÎT."',
+    choice: 'Que faites-vous ?',
+    escapeChip: '🏃 Fuir et vivre',
+    continueChip: '⚔ Aider le village',
+    escaped: '\n★  VICTOIRE  ★  Vous avez échappé au Château Mordenthal et laissé ses horreurs derrière vous pour toujours.',
+  },
+  well: {
+    search: 'Vous vous penchez sur le rebord du vieux puits de pierre pour regarder à l\'intérieur — et l\'ancien mortier s\'effrite sous votre poids.',
+    fall: (dmg, hp, max) => `Vous plongez dans une eau noire glacée. Vous vous extirpez en haletant, meurtri et gelé. Vous subissez ${dmg} dégâts. (${hp}/${max} PV)`,
+  },
+  talk: {
+    what: 'Parler à qui ?',
+    noOne: "Il n'y a personne à qui parler ici.",
+  },
+  finalVictory: {
+    lichFalls: "Le Nécromancien Archilliche Malachar émet un son comme cent voix criant à l'unisson. Sa forme squelettique s'effondre — les os claquent sur le sol, les robes noires se réduisent en cendres. La flamme violette dans ses orbites vacille et s'éteint.",
+    curseLifted: 'Une onde de lumière explose depuis le trône qui s\'effrite. À travers Helmwick, les morts tombent. Chaque tombe se referme. La lumière de sorcier s\'éteint.',
+    gratitude: 'Le silence. Pour la première fois depuis des semaines, un vrai silence, pur et net, emplit le village.',
+    title: '\n★  VRAIE VICTOIRE  ★  La malédiction de Helmwick est brisée. Malachar n\'est plus.',
+    xp: (xp) => `XP final : ${xp}`,
+  },
 };
 
 export const translations: Record<Locale, T> = { en, fr };

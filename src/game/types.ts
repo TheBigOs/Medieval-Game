@@ -1,6 +1,6 @@
 export type Direction = 'north' | 'south' | 'east' | 'west';
 export type ItemType = 'weapon' | 'armor' | 'consumable' | 'utility' | 'key';
-export type GamePhase = 'language-select' | 'exploring' | 'combat' | 'game_over' | 'victory';
+export type GamePhase = 'language-select' | 'exploring' | 'combat' | 'game_over' | 'victory' | 'post-escape';
 export type MessageType = 'narrative' | 'combat' | 'loot' | 'error' | 'system' | 'success' | 'roll';
 export type EquipSlot = 'weapon' | 'offhand' | 'body';
 
@@ -43,6 +43,8 @@ export interface Item {
   acBonus?: number;
   healAmount?: number;
   unlocksRoomId?: string;
+  onEquipHeal?: number;
+  onEquipMaxHpBonus?: number;
 }
 
 // ── Enemies ────────────────────────────────────────────────────────────────
@@ -83,6 +85,10 @@ export interface Room {
   searchable?: boolean;
   hiddenItems?: string[];
   searched?: boolean;
+  searchKeyId?: string;
+  wellTrap?: boolean;
+  npcName?: string;
+  npcDialogue?: string;
 }
 
 export interface EquippedItems {
@@ -116,6 +122,10 @@ export interface CombatState {
   round: number;
 }
 
+export interface CheckpointData {
+  player: Player;
+}
+
 export interface GameState {
   player: Player;
   rooms: Record<string, Room>;
@@ -124,4 +134,5 @@ export interface GameState {
   combat: CombatState | null;
   sneaking: boolean;
   language: import('./i18n').Locale;
+  checkpoint?: CheckpointData;
 }

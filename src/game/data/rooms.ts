@@ -153,5 +153,78 @@ export function buildRooms(locale: Locale = 'en'): Record<string, Room> {
       searchable: true, hiddenItems: pickRandom(['enchanted-staff', 'half-plate', 'greater-health-potion'], 1),
       searched: false,
     },
+
+    // ── Village of Helmwick ────────────────────────────────────────────────────
+
+    'village-road': {
+      id: 'village-road', ...rt['village-road'],
+      exits: { east: 'village-house', north: 'town-center' },
+      items: [], enemies: [], visited: false,
+      npcName: rt['village-road'].npcName,
+      npcDialogue: rt['village-road'].npcDialogue,
+    },
+
+    'village-house': {
+      id: 'village-house', ...rt['village-house'],
+      exits: { west: 'village-road' },
+      items: [], enemies: [spawn('zombie'), spawn('zombie')], visited: false,
+      searchable: true, hiddenItems: ['village-key'], searched: false,
+    },
+
+    'town-center': {
+      id: 'town-center', ...rt['town-center'],
+      exits: { south: 'village-road', east: 'inn', west: 'blacksmith', north: 'church' },
+      items: [], enemies: [spawn('zombie'), spawn('zombie')], visited: false,
+      wellTrap: true, searchable: true, hiddenItems: [], searched: false,
+    },
+
+    'inn': {
+      id: 'inn', ...rt['inn'],
+      exits: { west: 'town-center' },
+      items: pickRandom(['health-potion', 'healing-herbs', 'bread-loaf'], 2),
+      enemies: [spawn('zombie_barkeep'), spawn('zombie'), spawn('zombie')], visited: false,
+    },
+
+    'blacksmith': {
+      id: 'blacksmith', ...rt['blacksmith'],
+      exits: { east: 'town-center', north: 'blacksmith-vault' },
+      lockedExits: { north: { keyId: 'village-key', description: locale === 'fr' ? 'La porte de stockage est verrouillée. Vous avez besoin d\'une clé.' : 'The storage door is locked. You need a key.' } },
+      items: [], enemies: [spawn('forge_zombie')], visited: false,
+    },
+
+    'blacksmith-vault': {
+      id: 'blacksmith-vault', ...rt['blacksmith-vault'],
+      exits: { south: 'blacksmith' },
+      items: [
+        ...pickRandom(['half-plate', 'scale-armor', 'plate-armor'], 1),
+        ...pickRandom(['silver-sword', 'battle-axe', 'halberd', 'greatsword'], 1),
+        'greater-health-potion',
+      ],
+      enemies: [], visited: false,
+    },
+
+    'church': {
+      id: 'church', ...rt['church'],
+      exits: { south: 'town-center', east: 'cemetery', north: 'town-hall' },
+      items: ['holy-relic'],
+      enemies: [spawn('skeleton_priest'), spawn('skeleton_priest')], visited: false,
+      searchable: true, hiddenItems: ['greater-health-potion', 'healing-herbs'], searched: false,
+    },
+
+    'cemetery': {
+      id: 'cemetery', ...rt['cemetery'],
+      exits: { west: 'church' },
+      items: [],
+      enemies: [spawn('tomb_zombie'), spawn('tomb_zombie'), spawn('tomb_zombie'), spawn('ghoul'), spawn('ghoul')],
+      visited: false,
+      searchable: true, hiddenItems: pickRandom(['holy-water', 'greater-health-potion'], 1), searched: false,
+    },
+
+    'town-hall': {
+      id: 'town-hall', ...rt['town-hall'],
+      exits: { south: 'church' },
+      items: [],
+      enemies: [spawn('arch_lich')], visited: false,
+    },
   };
 }

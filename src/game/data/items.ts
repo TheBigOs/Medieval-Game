@@ -239,7 +239,25 @@ const BASE_ITEMS: Record<string, Item> = {
     healAmount: 6,
   },
 
+  // ── Holy Relic ─────────────────────────────────────────────────────────────
+  'holy-relic': {
+    id: 'holy-relic',
+    name: 'Holy Relic',
+    type: 'armor',
+    description: 'A golden reliquary warm to the touch, pulsing with divine light. Carried in the shield hand, it grants fortitude and wards off undead.',
+    slot: 'offhand',
+    acBonus: 3,
+    onEquipHeal: 10,
+    onEquipMaxHpBonus: 10,
+  },
+
   // ── Keys / Utilities ──────────────────────────────────────
+  'village-key': {
+    id: 'village-key',
+    name: 'Village House Key',
+    type: 'key',
+    description: "A plain iron key pressed into your hand by a desperate villager. It unlocks the blacksmith's storage room.",
+  },
   'rusty-key': {
     id: 'rusty-key',
     name: 'Rusty Iron Key',

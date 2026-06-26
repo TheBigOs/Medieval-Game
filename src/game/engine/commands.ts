@@ -188,6 +188,27 @@ function resolveEnemyDeath(state: GameState, enemy: EnemyInstance): GameState {
   }
   const updatedPlayer = { ...state.player, xp: newXP, maxHp: newMaxHp };
 
+  // Arch-Lich death = true final victory
+  if (enemy.templateId === 'arch_lich') {
+    return {
+      ...state,
+      player: updatedPlayer,
+      rooms: { ...state.rooms, [roomId]: updatedRoom },
+      phase: 'victory',
+      combat: null,
+      messages: [
+        ...state.messages, ...newMsgs,
+        msg('\n──────────────────────────────────────────', 'system'),
+        msg(T.finalVictory.lichFalls, 'success'),
+        msg(T.finalVictory.curseLifted, 'success'),
+        msg(T.finalVictory.gratitude, 'narrative'),
+        msg(T.finalVictory.title, 'success'),
+        msg(T.finalVictory.xp(newXP), 'system'),
+        msg('──────────────────────────────────────────', 'system'),
+      ],
+    };
+  }
+
   const nextAgg = updatedRoom.enemies.find(e => e.isAlive && e.aggressive);
   let phase: GamePhase = 'exploring';
   let nextCombat = null;
@@ -197,7 +218,7 @@ function resolveEnemyDeath(state: GameState, enemy: EnemyInstance): GameState {
     newMsgs.push(msg(T.combat.nextAgg(nextAgg.name), 'combat'));
   }
 
-  return {
+  let newState: GameState = {
     ...state,
     player: updatedPlayer,
     rooms: { ...state.rooms, [roomId]: updatedRoom },
@@ -205,6 +226,13 @@ function resolveEnemyDeath(state: GameState, enemy: EnemyInstance): GameState {
     phase,
     combat: nextCombat,
   };
+
+  // Remaining enemies retaliate after a kill
+  if (phase === 'combat') {
+    newState = enemyTurn(newState);
+  }
+
+  return newState;
 }
 
 // ── Commands ───────────────────────────────────────────────────────────────
@@ -228,7 +256,6 @@ function handleGo(state: GameState, target: string): GameState {
     s: 'south', south: 'south',
     e: 'east',  east: 'east',
     w: 'west',  west: 'west',
-    // French direction aliases
     nord: 'north', sud: 'south', est: 'east', ouest: 'west',
   };
 
@@ -265,19 +292,20 @@ function handleGo(state: GameState, target: string): GameState {
 
   const targetId = room.exits[dir]!;
 
+  // Reaching the castle exit → post-escape choice
   if (targetId === 'exit') {
     return {
       ...state,
-      phase: 'victory',
+      phase: 'post-escape',
       messages: [
         ...state.messages,
         msg('\n──────────────────────────────────────────', 'system'),
-        msg(T.nav.victory[0], 'success'),
-        msg(T.nav.victory[1], 'success'),
-        msg(T.nav.victory[2], 'success'),
-        msg(T.nav.victory[3], 'success'),
-        msg(T.nav.victoryXP(state.player.xp), 'system'),
+        msg(T.postEscape.burst, 'success'),
+        msg(T.postEscape.free, 'success'),
+        msg(T.postEscape.encounter, 'narrative'),
+        msg(T.postEscape.quest, 'narrative'),
         msg('──────────────────────────────────────────', 'system'),
+        msg(T.postEscape.choice, 'system'),
       ],
     };
   }
@@ -368,7 +396,6 @@ function handleSneak(state: GameState, target: string): GameState {
       newState = addMessages(newState, [msg(T.sneak.successEmpty(targetRoom.name), 'success')]);
     }
     newState = addMessages(newState, describeRoom(newState));
-    // Do NOT call checkAggressiveEnemies — player keeps the initiative
   } else {
     const aggressor = targetRoom.enemies.find(e => e.isAlive);
     newState = addMessages(newState, describeRoom(newState));
@@ -424,6 +451,12 @@ function handleExamine(state: GameState, query: string): GameState {
     if (it && fuzzyMatch(query, it.name, it.id)) {
       return addMessages(state, [msg(`${it.name}: ${it.description}`)]);
     }
+  }
+
+  // Check room NPC
+  const room = state.rooms[state.player.currentRoomId];
+  if (room.npcName && fuzzyMatch(query, room.npcName, 'npc')) {
+    return addMessages(state, [msg(room.npcDialogue ?? room.npcName)]);
   }
 
   return addMessages(state, [msg(T.examine.notFound(query), 'error')]);
@@ -506,6 +539,16 @@ function handleEquip(state: GameState, query: string): GameState {
   equipped[item.slot] = item;
   inventory = removeOneFromInventory(inventory, item);
 
+  // Holy relic bonus: +10 max HP, +10 current HP
+  let newMaxHp = state.player.maxHp;
+  let newHp = state.player.hp;
+  const extraMsgs: GameMessage[] = [];
+  if (item.onEquipMaxHpBonus) {
+    newMaxHp = state.player.maxHp + item.onEquipMaxHpBonus;
+    newHp = Math.min(newMaxHp, state.player.hp + (item.onEquipHeal ?? 0));
+    extraMsgs.push(msg(T.equip.relic(item.onEquipHeal ?? 0, newMaxHp), 'success'));
+  }
+
   const newAC = computeAC({ ...state.player, equipped });
 
   let detail = '';
@@ -516,8 +559,8 @@ function handleEquip(state: GameState, query: string): GameState {
 
   return {
     ...state,
-    player: { ...state.player, inventory, equipped, ac: newAC },
-    messages: [...state.messages, msg(T.equip.done(item.name, detail), 'system')],
+    player: { ...state.player, inventory, equipped, ac: newAC, hp: newHp, maxHp: newMaxHp },
+    messages: [...state.messages, msg(T.equip.done(item.name, detail), 'system'), ...extraMsgs],
   };
 }
 
@@ -577,8 +620,40 @@ function handleSearch(state: GameState): GameState {
   const ITEMS = getItems(state.language);
   const roomId = state.player.currentRoomId;
   const room = state.rooms[roomId];
+
+  // Well trap — triggers once, then room is marked searched
+  if (room.wellTrap && !room.searched) {
+    const damage = Math.floor(Math.random() * 8) + 1;
+    const newHp = Math.max(1, state.player.hp - damage);
+    const updatedRoom = { ...room, searched: true };
+    let newState: GameState = {
+      ...state,
+      player: { ...state.player, hp: newHp },
+      rooms: { ...state.rooms, [roomId]: updatedRoom },
+      messages: [
+        ...state.messages,
+        msg(T.well.search, 'error'),
+        msg(T.well.fall(damage, newHp, state.player.maxHp), 'error'),
+      ],
+    };
+    if (state.phase === 'combat') newState = enemyTurn(newState);
+    return newState;
+  }
+
   if (!room.searchable) return addMessages(state, [msg(T.search.nothing)]);
   if (room.searched) return addMessages(state, [msg(T.search.already)]);
+
+  // Key-locked search (blacksmith chest)
+  if (room.searchKeyId) {
+    const keyIdx = state.player.inventory.findIndex(i => i.id === room.searchKeyId);
+    if (keyIdx === -1) return addMessages(state, [msg(T.search.needKey, 'system')]);
+    // Consume the key
+    const newInventory = [
+      ...state.player.inventory.slice(0, keyIdx),
+      ...state.player.inventory.slice(keyIdx + 1),
+    ];
+    state = { ...state, player: { ...state.player, inventory: newInventory } };
+  }
 
   const hidden = room.hiddenItems ?? [];
   const updatedRoom = { ...room, items: [...room.items, ...hidden], searched: true };
@@ -589,6 +664,20 @@ function handleSearch(state: GameState): GameState {
     msgs.push(msg(T.search.nothingElse));
   }
   return { ...state, rooms: { ...state.rooms, [roomId]: updatedRoom }, messages: [...state.messages, ...msgs] };
+}
+
+function handleTalk(state: GameState, query: string): GameState {
+  const T = getT(state.language);
+  const room = state.rooms[state.player.currentRoomId];
+  if (!room.npcName) return addMessages(state, [msg(T.talk.noOne, 'system')]);
+
+  // Match "villager", "man", "person", the NPC name, or just empty "talk"
+  const matches = !query || fuzzyMatch(query, room.npcName, 'npc') ||
+    ['man', 'person', 'woman', 'villager', 'homme', 'femme', 'villageois', 'npc'].includes(query.toLowerCase());
+
+  if (!matches) return addMessages(state, [msg(T.talk.noOne, 'system')]);
+
+  return addMessages(state, [msg(room.npcDialogue ?? room.npcName, 'narrative')]);
 }
 
 function handleStats(state: GameState): GameState {
@@ -621,7 +710,6 @@ function handleHelp(state: GameState): GameState {
 
 function parseBodyPart(text: string): BodyPart | null {
   const t = text.toLowerCase();
-  // French body part aliases
   if (t.includes('tête') || t.includes('tete') || t.includes('head')) return 'head';
   if (t.includes('poitrine') || t.includes('chest') || t.includes('torso') || t.includes('body')) return 'chest';
   if (t.includes('bras droit') || t.includes('right arm') || t.includes('rarm') || t.includes('sword arm')) return 'rightArm';
@@ -631,59 +719,73 @@ function parseBodyPart(text: string): BodyPart | null {
   return null;
 }
 
+// ALL alive enemies attack the player every round
 function enemyTurn(state: GameState): GameState {
   const T = getT(state.language);
-  const enemy = currentCombatEnemy(state);
-  if (!enemy || !enemy.isAlive) return { ...state, phase: 'exploring', combat: null };
+  const roomId = state.player.currentRoomId;
+  const room = state.rooms[roomId];
+  const aliveEnemies = room.enemies.filter(e => e.isAlive);
 
-  if (enemy.stunned) {
-    const roomId = state.player.currentRoomId;
-    const room = state.rooms[roomId];
-    const updatedEnemy = { ...enemy, stunned: false };
-    const updatedRoom = {
-      ...room,
-      enemies: room.enemies.map(e => e.instanceId === enemy.instanceId ? updatedEnemy : e),
-    };
-    return addMessages(
-      { ...state, rooms: { ...state.rooms, [roomId]: updatedRoom } },
-      [msg(T.combat.stun(enemy.name), 'combat')]
-    );
+  if (aliveEnemies.length === 0) {
+    return { ...state, phase: 'exploring', combat: null };
   }
 
-  const penalties = getEnemyPenalties(enemy);
-  if (!penalties.canAttack) {
-    return addMessages(state, [msg(T.combat.cantAttack(enemy.name), 'combat')]);
-  }
-
-  const result = enemyAttack(enemy, state.player);
   const msgs: GameMessage[] = [];
+  let updatedEnemies = [...room.enemies];
+  let playerHp = state.player.hp;
 
-  if (result.miss) {
-    msgs.push(msg(T.combat.enemyFumble(enemy.name), 'combat'));
-  } else if (result.hit) {
-    const pre = result.critical ? T.combat.critical : '';
-    msgs.push(msg(T.combat.enemyHit(pre, enemy.name, result.damage, result.d20Roll), 'combat'));
-  } else {
-    msgs.push(msg(T.combat.enemyMiss(enemy.name, result.d20Roll, result.targetAC), 'combat'));
-  }
+  for (const enemy of aliveEnemies) {
+    const eIdx = updatedEnemies.findIndex(e => e.instanceId === enemy.instanceId);
+    const cur = updatedEnemies[eIdx];
 
-  const newHp = state.player.hp - result.damage;
-  if (newHp <= 0) {
-    return {
-      ...state,
-      player: { ...state.player, hp: 0 },
-      phase: 'game_over',
-      combat: null,
-      messages: [
-        ...state.messages, ...msgs,
+    if (cur.stunned) {
+      updatedEnemies[eIdx] = { ...cur, stunned: false };
+      msgs.push(msg(T.combat.stun(cur.name), 'combat'));
+      continue;
+    }
+
+    const penalties = getEnemyPenalties(cur);
+    if (!penalties.canAttack) {
+      msgs.push(msg(T.combat.cantAttack(cur.name), 'combat'));
+      continue;
+    }
+
+    const result = enemyAttack(cur, { ...state.player, hp: playerHp });
+
+    if (result.miss) {
+      msgs.push(msg(T.combat.enemyFumble(cur.name), 'combat'));
+    } else if (result.hit) {
+      const pre = result.critical ? T.combat.critical : '';
+      msgs.push(msg(T.combat.enemyHit(pre, cur.name, result.damage, result.d20Roll), 'combat'));
+      playerHp -= result.damage;
+    } else {
+      msgs.push(msg(T.combat.enemyMiss(cur.name, result.d20Roll, result.targetAC), 'combat'));
+    }
+
+    if (playerHp <= 0) {
+      const deathMsgs = [
         msg(T.combat.playerDeath, 'combat'),
         msg(T.combat.gameOver, 'error'),
         msg(T.combat.gameOverHint, 'system'),
-      ],
-    };
+      ];
+      if (state.checkpoint) deathMsgs.push(msg(T.combat.checkpointHint, 'system'));
+      return {
+        ...state,
+        player: { ...state.player, hp: 0 },
+        rooms: { ...state.rooms, [roomId]: { ...room, enemies: updatedEnemies } },
+        phase: 'game_over',
+        combat: null,
+        messages: [...state.messages, ...msgs, ...deathMsgs],
+      };
+    }
   }
 
-  return { ...state, player: { ...state.player, hp: newHp }, messages: [...state.messages, ...msgs] };
+  return {
+    ...state,
+    player: { ...state.player, hp: playerHp },
+    rooms: { ...state.rooms, [roomId]: { ...room, enemies: updatedEnemies } },
+    messages: [...state.messages, ...msgs],
+  };
 }
 
 function handleAttack(state: GameState, rawTarget: string): GameState {
@@ -787,17 +889,31 @@ function handleFlee(state: GameState): GameState {
 // ── Command dispatcher ─────────────────────────────────────────────────────
 
 export function processCommand(state: GameState, raw: string): GameState {
-  // Language selection phase
+  // Language selection
   if (state.phase === 'language-select') {
-    const T = getT('en'); // Use bilingual T for this phase
+    const T = getT('en');
     const input = raw.trim().toLowerCase();
-    if (input === 'english' || input === 'en') {
-      return startGame(state, 'en');
-    }
-    if (input === 'french' || input === 'français' || input === 'francais' || input === 'fr') {
-      return startGame(state, 'fr');
-    }
+    if (input === 'english' || input === 'en') return startGame(state, 'en');
+    if (input === 'french' || input === 'français' || input === 'francais' || input === 'fr') return startGame(state, 'fr');
     return addMessages(state, [msg(T.langSelect.invalid, 'error')]);
+  }
+
+  // Post-escape choice
+  if (state.phase === 'post-escape') {
+    const input = raw.trim().toLowerCase();
+    if (['escape', 'leave', 'retire', 'run', 'fuir', 'partir', 'quitter'].includes(input)) {
+      const T = getT(state.language);
+      return {
+        ...state,
+        phase: 'victory',
+        messages: [...state.messages, msg(T.postEscape.escaped, 'success')],
+      };
+    }
+    if (['continue', 'help', 'village', 'north', 'n', 'aider', 'continuer', 'nord'].includes(input)) {
+      return travelToVillage(state);
+    }
+    const T = getT(state.language);
+    return addMessages(state, [msg(T.postEscape.choice, 'system')]);
   }
 
   const input = raw.trim();
@@ -809,11 +925,9 @@ export function processCommand(state: GameState, raw: string): GameState {
   const target = rest.join(' ');
 
   switch (verb) {
-    // Look
     case 'look': case 'l': case 'regarder': case 'r':
       return handleLook(state);
 
-    // Go
     case 'go': case 'aller':
       return handleGo(state, target);
     case 'north': case 'n': case 'nord':
@@ -825,68 +939,53 @@ export function processCommand(state: GameState, raw: string): GameState {
     case 'west': case 'w': case 'ouest':
       return handleGo(state, 'west');
 
-    // Examine
     case 'examine': case 'x': case 'examiner':
       return handleExamine(state, target);
 
-    // Take
     case 'take': case 'get': case 'pick': case 'prendre': case 'ramasser':
       return handleTake(state, target.replace(/^up\s*/, ''));
 
-    // Drop
     case 'drop': case 'deposer': case 'déposer':
       return handleDrop(state, target);
 
-    // Inventory
     case 'inventory': case 'i': case 'inv': case 'inventaire':
       return handleInventory(state);
 
-    // Equip
     case 'equip': case 'wear': case 'wield': case 'equiper': case 'équiper':
       return handleEquip(state, target);
 
-    // Unequip
     case 'unequip': case 'remove': case 'retirer': case 'enlever':
       return handleUnequip(state, target);
 
-    // Use
     case 'use': case 'drink': case 'eat': case 'utiliser': case 'boire': case 'manger':
       return handleUse(state, target);
 
-    // Search
     case 'search': case 'fouiller':
       return handleSearch(state);
 
-    // Stats
+    case 'talk': case 'speak': case 'parler': case 'discuter':
+      return handleTalk(state, target);
+
     case 'stats': case 'status': case 'statistiques':
       return handleStats(state);
 
-    // Help
     case 'help': case 'h': case '?': case 'aide':
       return handleHelp(state);
 
-    // Attack
     case 'attack': case 'fight': case 'hit': case 'strike': case 'a':
     case 'attaquer': case 'frapper': case 'attaque':
       return handleAttack(state, target);
 
-    // Sneak
-    case 'sneak': case 'creep': case 'steal': case 'tiptoe':
-    case 'se': // "se faufiler" — user types "se faufiler nord"
-      // Handle "se faufiler [dir]" — the full phrase is "se faufiler"
-      if (verb === 'se' && rest[0] === 'faufiler') {
-        return handleSneak(state, rest.slice(1).join(' '));
-      }
+    case 'sneak': case 'creep': case 'steal': case 'tiptoe': case 'faufiler':
       return handleSneak(state, target);
-    case 'faufiler':
-      return handleSneak(state, target);
+    case 'se':
+      if (rest[0] === 'faufiler') return handleSneak(state, rest.slice(1).join(' '));
+      return addMessages(state, [msg(T.unknownCmd(raw), 'error')]);
 
-    // Flee
     case 'flee': case 'run': case 'escape': case 'retreat':
-    case 'fuir': case 'fuite': case 'fuire':
+    case 'fuir': case 'fuite':
       return handleFlee(state);
 
-    // Body-part shorthand in combat
     case 'head': case 'chest': case 'torso':
     case 'tête': case 'tete': case 'poitrine':
       return state.phase === 'combat'
@@ -902,6 +1001,76 @@ export function processCommand(state: GameState, raw: string): GameState {
       return addMessages(state, [msg(T.unknownCmd(raw), 'error')]);
     }
   }
+}
+
+// ── Village transition ─────────────────────────────────────────────────────
+
+function travelToVillage(state: GameState): GameState {
+  const T = getT(state.language);
+  const targetId = 'village-road';
+
+  // Save checkpoint when the player first arrives at the village
+  const checkpoint = { player: { ...state.player } };
+
+  let newState: GameState = {
+    ...state,
+    phase: 'exploring',
+    checkpoint,
+    player: {
+      ...state.player,
+      currentRoomId: targetId,
+      previousRoomId: null,
+    },
+    rooms: { ...state.rooms, [targetId]: { ...state.rooms[targetId], visited: true } },
+    messages: [
+      ...state.messages,
+      msg(T.checkpoint.saved, 'system'),
+    ],
+  };
+  newState = addMessages(newState, describeRoom(newState));
+  return newState;
+}
+
+// ── Checkpoint restore ─────────────────────────────────────────────────────
+
+export function returnToCheckpoint(state: GameState): GameState {
+  const { checkpoint, language } = state;
+  if (!checkpoint) return state;
+  const T = getT(language);
+
+  // Rebuild all rooms fresh so village enemies are alive again
+  const freshRooms = buildRooms(language);
+
+  const restoredPlayer = {
+    ...checkpoint.player,
+    hp: checkpoint.player.maxHp,  // restore to full HP
+    currentRoomId: 'village-road',
+    previousRoomId: null,
+  };
+
+  const targetRoom = freshRooms['village-road'];
+  const freshRoomsWithVisited = {
+    ...freshRooms,
+    'village-road': { ...targetRoom, visited: true },
+  };
+
+  const baseState: GameState = {
+    ...state,
+    player: restoredPlayer,
+    rooms: freshRoomsWithVisited,
+    phase: 'exploring',
+    combat: null,
+    sneaking: false,
+    checkpoint,  // keep checkpoint so player can die and retry again
+    messages: [
+      msg('\n──────────────────────────────────────────', 'system'),
+      msg(T.checkpoint.returnTitle, 'system'),
+      msg(T.checkpoint.returnMsg, 'narrative'),
+      msg('──────────────────────────────────────────', 'system'),
+    ],
+  };
+
+  return addMessages(baseState, describeRoom(baseState));
 }
 
 // ── Game start helper ──────────────────────────────────────────────────────

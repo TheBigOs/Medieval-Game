@@ -55,12 +55,21 @@ const StatusBar: React.FC<Props> = ({ gameState }) => {
   const { player, rooms, phase, combat } = gameState;
   const T = getT(gameState.language);
 
-  // During language selection, show only a minimal banner
+  // During language selection or post-escape choice, show minimal banner
   if (phase === 'language-select') {
     return (
       <div className="status-bar">
         <div className="status-main">
           <div className="stat-block phase-badge explore-badge">🌐 LANGUAGE / LANGUE</div>
+        </div>
+      </div>
+    );
+  }
+  if (phase === 'post-escape') {
+    return (
+      <div className="status-bar">
+        <div className="status-main">
+          <div className="stat-block phase-badge victory-badge">{T.ui.escapedBadge}</div>
         </div>
       </div>
     );
